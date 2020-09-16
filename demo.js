@@ -7,8 +7,9 @@ const SOME_ITEM = "SOME_ITEM";
 const typeDefs = gql`
   type User {
     id: ID!
+    error: String!
     username: String!
-    createdAt: Int!
+    createdAt: String!
   }
 
   type Settings {
@@ -46,7 +47,7 @@ const resolvers = {
       return {
         id: "1234",
         username: "Steve",
-        createdAt: "3134098234098",
+        createdAt: "123443",
       };
     },
     settings(_, { user }) {
@@ -89,11 +90,21 @@ const resolvers = {
       };
     },
   },
+
+  User: {
+    error() {
+      return "hey oh";
+      // throw new Error("Dees nuts!!!");
+    },
+  },
 };
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  formatError(e) {
+    return [{ message: e.message, path: e.path, locations: e.locations, extensions: e.extensions }];
+  },
   async context({ connection, req }) {
     if (connection) {
       return { ...connection.context };

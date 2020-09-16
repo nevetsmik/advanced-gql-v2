@@ -1,4 +1,4 @@
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer, AuthenticationError } = require("apollo-server");
 const typeDefs = require("./typedefs");
 const resolvers = require("./resolvers");
 const { createToken, getUserFromToken } = require("./auth");
@@ -27,7 +27,7 @@ const server = new ApolloServer({
       const token = params.authToken;
       const user = getUserFromToken(token);
       if (!user) {
-        throw new Error("Not authenticated for subscription");
+        throw new AuthenticationError("Not authenticated for subscription");
       }
       // Whatever is returned here gets merged with the connection.context object in the context method
       return { user };
