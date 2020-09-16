@@ -66,7 +66,6 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   async context({}) {
-    // Do some stuff for authentication
     return {};
   },
 });

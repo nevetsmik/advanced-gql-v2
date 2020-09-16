@@ -8,6 +8,33 @@
       "avatar": "http",
       "createdAt": 1571213104370,
       "id": "Z2hlvDmLOSRZGebC_Z_aA"
+    },
+    {
+      "email": "emailsk@gmail.com",
+      "password": "password",
+      "role": "ADMIN",
+      "verified": false,
+      "avatar": "http",
+      "createdAt": 1600204000051,
+      "id": "LzxqKQtEueK0excyTVPFm"
+    },
+    {
+      "email": "steve@airdeck-tech.com",
+      "password": "password",
+      "role": "MEMBER",
+      "verified": false,
+      "avatar": "http",
+      "createdAt": 1600246212647,
+      "id": "PaCIuKpiSyD-H3XFj30Jv"
+    },
+    {
+      "email": "stevekim@airdeck-tech.com",
+      "password": "password",
+      "role": "ADMIN",
+      "verified": false,
+      "avatar": "http",
+      "createdAt": 1600246815216,
+      "id": "PrEs9k0CE2-DdJ8mVilGl"
     }
   ],
   "posts": [],
