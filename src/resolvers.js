@@ -1,5 +1,12 @@
 const { authenticated, authorized } = require("./auth");
+
+// Set up pub-sub on server
+const { PubSub } = require("apollo-server");
+const pubSub = new PubSub({});
+
+// events that we want to subscribe to
 const NEW_POST = "NEW_POST";
+const OTHER_POST = "OTHER_POST";
 
 /**
  * Anything Query / Mutation resolver
@@ -34,7 +41,14 @@ module.exports = {
 
     createPost: authenticated((_, { input }, { user, models }) => {
       const post = models.Post.createOne({ ...input, author: user.id });
-      pubsub.publish(NEW_POST, { newPost: post });
+      // Publish NEW_POST event on a createPost mutation
+      pubSub.publish(NEW_POST, { newPost: post });
+      return post;
+    }),
+    createOtherPost: authenticated((_, { input }, { user, models }) => {
+      const post = models.Post.createOne({ ...input, author: user.id });
+      // Publish OTHER_POST event on a createOtherPost mutation
+      pubSub.publish(OTHER_POST, { otherPost: post });
       return post;
     }),
 
@@ -67,6 +81,16 @@ module.exports = {
 
       const token = createToken(user);
       return { token, user };
+    },
+  },
+  Subscription: {
+    // Subscribe to NEW_POST events
+    newPost: {
+      subscribe: () => pubSub.asyncIterator(NEW_POST),
+    },
+    // Subscribe to OTHER_POST events
+    otherPost: {
+      subscribe: () => pubSub.asyncIterator(OTHER_POST),
     },
   },
   User: {

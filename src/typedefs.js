@@ -1,4 +1,4 @@
-const gql = require('graphql-tag')
+const gql = require("graphql-tag");
 
 module.exports = gql`
   enum Theme {
@@ -52,7 +52,8 @@ module.exports = gql`
     role: Role!
   }
 
-  input NewPostInput {
+  # Input for creating a post
+  input PostInput {
     message: String!
   }
 
@@ -94,11 +95,20 @@ module.exports = gql`
 
   type Mutation {
     updateSettings(input: UpdateSettingsInput!): Settings!
-    createPost(input: NewPostInput!): Post!
+    # createPost is going to listen for the NEW_POST event
+    createPost(input: PostInput!): Post!
+    # createOtherPost is going to listen for the OTHER_POST event
+    createOtherPost(input: PostInput!): Post!
     updateMe(input: UpdateUserInput!): User
     invite(input: InviteInput!): Invite!
     signup(input: SignupInput!): AuthUser!
     signin(input: SigninInput!): AuthUser!
   }
 
-`
+  type Subscription {
+    # Subscription to posts with payload of newPost
+    newPost: Post
+    # Subscription to posts with payload of otherPost
+    otherPost: Post
+  }
+`;

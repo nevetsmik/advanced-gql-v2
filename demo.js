@@ -1,5 +1,8 @@
 const gql = require("graphql-tag");
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer, PubSub } = require("apollo-server");
+
+const pubSub = new PubSub({});
+const SOME_ITEM = "SOME_ITEM";
 
 const typeDefs = gql`
   type User {
@@ -25,6 +28,15 @@ const typeDefs = gql`
 
   type Mutation {
     settings(input: NewSettingsInput): Settings
+    createItem(task: String!): Item!
+  }
+
+  type Item {
+    task: String!
+  }
+
+  type Subscription {
+    newItem: Item
   }
 `;
 
@@ -49,6 +61,23 @@ const resolvers = {
     settings(_, { input }, context) {
       return input;
     },
+    createItem(_, { task }) {
+      const item = {
+        task,
+      };
+      // trigger for when SOME_ITEM is actually created
+      // newItem is the data that will be available to every subscription
+      pubSub.publish(SOME_ITEM, { newItem: item });
+      return item;
+    },
+  },
+
+  Subscription: {
+    // newItem subscription is subscribing to any SOME_ITEM event
+    newItem: {
+      // resolver for telling the newItem subscription what we are subscribing to - in this example we are subscribing to the SOME_ITEM event.
+      subscribe: () => pubSub.asyncIterator(SOME_ITEM),
+    },
   },
 
   Settings: {
@@ -65,8 +94,13 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  async context({}) {
-    return {};
+  async context({ connection, req }) {
+    if (connection) {
+      return { ...connection.context };
+    }
+  },
+  subscriptions: {
+    onConnect(params) {},
   },
 });
 
