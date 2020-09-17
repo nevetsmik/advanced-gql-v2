@@ -2,11 +2,17 @@ const { ApolloServer, AuthenticationError } = require("apollo-server");
 const typeDefs = require("./typedefs");
 const resolvers = require("./resolvers");
 const { createToken, getUserFromToken } = require("./auth");
+const { FormatDateDirective, AuthenticationDirective, AuthorizationDirective } = require("./directives");
 const db = require("./db");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  schemaDirectives: {
+    formatDate: FormatDateDirective,
+    authenticated: AuthenticationDirective,
+    authorized: AuthorizationDirective,
+  },
   context({ req, connection }) {
     const context = { ...db };
     // Handle context differenctly for subscriptions, which will have a connection obj

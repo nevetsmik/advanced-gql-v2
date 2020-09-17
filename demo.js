@@ -1,13 +1,42 @@
 const gql = require("graphql-tag");
-const { ApolloServer, PubSub } = require("apollo-server");
+const { defaultFieldResolver, GraphQLString } = require("graphql");
+const { ApolloServer, PubSub, SchemaDirectiveVisitor } = require("apollo-server");
 
 const pubSub = new PubSub({});
 const SOME_ITEM = "SOME_ITEM";
 
+// Log the field when it gets resolved
+class LogDirective extends SchemaDirectiveVisitor {
+  visitFieldDefinition(field) {
+    // Allow the client to pass a message arg of type String
+    // field.args are what's passed from the query
+    // this.args are passed from schema
+    field.args.push({ type: GraphQLString, name: "message" });
+
+    // Similar pattern as authentication/authorization
+    // 1). Save the old resolver for the field or the default resolver
+    // 2). Wrap the old resolve inside a newly defined field.resolve function
+    // 3). defaultFieldResolver will map fields from the resolve to fields of query that have the same name
+    const oldResolver = field.resolve || defaultFieldResolver;
+    field.resolve = (root, { message, ...rest }, ctx, info) => {
+      // schemaMessage is "I'm the schema message"
+      debugger;
+      const { message: schemaMessage } = this.args;
+      // message is what the client passed in query id(message: "something")
+      console.log(`client message: ${message}`);
+      console.log(`schema message: ${schemaMessage}`);
+      return oldResolver.call(this, root, rest, ctx, info);
+    };
+  }
+}
+
 const typeDefs = gql`
+  # must specifiy what the directive will be applied to, e.g., TYPE, FIELD, etc.
+  directive @log(message: String = "message") on FIELD_DEFINITION
+
   type User {
-    id: ID!
-    error: String!
+    id: ID! @log(message: "I'm the schema message")
+    error: String! @deprecated(reason: "I'm deprecated")
     username: String!
     createdAt: String!
   }
@@ -102,6 +131,9 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  schemaDirectives: {
+    log: LogDirective,
+  },
   formatError(e) {
     return [{ message: e.message, path: e.path, locations: e.locations, extensions: e.extensions }];
   },

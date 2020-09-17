@@ -1,6 +1,10 @@
 const gql = require("graphql-tag");
 
 module.exports = gql`
+  directive @formatDate(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSSxxx") on FIELD_DEFINITION
+  directive @authenticated on FIELD_DEFINITION
+  directive @authorized(role: Role!) on FIELD_DEFINITION
+
   enum Theme {
     DARK
     LIGHT
@@ -17,7 +21,7 @@ module.exports = gql`
     email: String!
     avatar: String!
     verified: Boolean!
-    createdAt: String!
+    createdAt: String! @formatDate
     posts: [Post]!
     role: Role!
     settings: Settings!
@@ -86,29 +90,29 @@ module.exports = gql`
   }
 
   type Query {
-    me: User!
-    posts: [Post]!
-    post(id: ID!): Post!
-    userSettings: Settings!
+    me: User! @authenticated
+    posts: [Post]! @authenticated
+    post(id: ID!): Post! @authenticated
+    userSettings: Settings! @authenticated
     feed: [Post]!
   }
 
   type Mutation {
-    updateSettings(input: UpdateSettingsInput!): Settings!
+    updateSettings(input: UpdateSettingsInput!): Settings! @authenticated
     # createPost is going to listen for the NEW_POST event
-    createPost(input: PostInput!): Post!
+    createPost(input: PostInput!): Post! @authenticated
     # createOtherPost is going to listen for the OTHER_POST event
-    createOtherPost(input: PostInput!): Post!
-    updateMe(input: UpdateUserInput!): User
-    invite(input: InviteInput!): Invite!
+    createOtherPost(input: PostInput!): Post! @authenticated
+    updateMe(input: UpdateUserInput!): User @authenticated
+    invite(input: InviteInput!): Invite! @authenticated @authorized(role: ADMIN)
     signup(input: SignupInput!): AuthUser!
     signin(input: SigninInput!): AuthUser!
   }
 
   type Subscription {
     # Subscription to posts with payload of newPost
-    newPost: Post
+    newPost: Post @authenticated
     # Subscription to posts with payload of otherPost
-    otherPost: Post
+    otherPost: Post @authenticated
   }
 `;

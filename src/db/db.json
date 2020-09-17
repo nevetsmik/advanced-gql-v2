@@ -11,69 +11,23 @@
     },
     {
       "email": "emailsk@gmail.com",
-      "password": "password",
+      "password": "pass",
       "role": "ADMIN",
       "verified": false,
       "avatar": "http",
-      "createdAt": 1600204000051,
-      "id": "LzxqKQtEueK0excyTVPFm"
+      "createdAt": 1600359357453,
+      "id": "JZ-IrhluWQZlBeTlz8fKL"
     },
     {
-      "email": "steve@airdeck-tech.com",
-      "password": "password",
+      "email": "emailstevenkim@gmail.com",
+      "password": "pass",
       "role": "MEMBER",
       "verified": false,
       "avatar": "http",
-      "createdAt": 1600246212647,
-      "id": "PaCIuKpiSyD-H3XFj30Jv"
-    },
-    {
-      "email": "stevekim@airdeck-tech.com",
-      "password": "password",
-      "role": "ADMIN",
-      "verified": false,
-      "avatar": "http",
-      "createdAt": 1600246815216,
-      "id": "PrEs9k0CE2-DdJ8mVilGl"
+      "createdAt": 1600363182083,
+      "id": "wfI8_EKMU848HCDVDYDw_"
     }
   ],
-  "posts": [
-    {
-      "message": "Other post",
-      "author": "LzxqKQtEueK0excyTVPFm",
-      "createdAt": 1600268477434,
-      "id": "RRIq0Qty4NX7-r6mdO-gO"
-    },
-    {
-      "message": "Other post",
-      "author": "LzxqKQtEueK0excyTVPFm",
-      "createdAt": 1600268906585,
-      "id": "YTLszbZJWeBx_Nk6fv6z9"
-    },
-    {
-      "message": "Peter Peter Davenport",
-      "author": "LzxqKQtEueK0excyTVPFm",
-      "createdAt": 1600268910509,
-      "id": "z5dVPToxgrt_x1Ckf6sp5"
-    },
-    {
-      "message": "Peter Peter Davenport",
-      "author": "LzxqKQtEueK0excyTVPFm",
-      "createdAt": 1600268915117,
-      "id": "givgd3bNd1u9YmPztTQzX"
-    },
-    {
-      "message": "Other post",
-      "author": "LzxqKQtEueK0excyTVPFm",
-      "createdAt": 1600268933722,
-      "id": "zszdeCQBX4XIa_Hixc__8"
-    },
-    {
-      "message": "Other post",
-      "author": "LzxqKQtEueK0excyTVPFm",
-      "createdAt": 1600268937367,
-      "id": "pvzqcmgVp3guJspzC132H"
-    }
-  ],
+  "posts": [],
   "settings": []
 }
